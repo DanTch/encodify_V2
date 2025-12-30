@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <title>Encodify | مخدوش‌گر</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="head">
+        <div>
+          <h1>مخدوش‌گر</h1>
+          <p class="subtitle">
+            یک ابزار تحت وب مناسب ارسال امن‌تر در شرایط شنود یا محدودیت پیامکی،
+            که متن، لینک و کانفیگ‌ها را با کلید اختیاری به کلمات فارسی خوانا
+            تبدیل نموده و امکان بازگردانی مجدد آن‌را فراهم می‌کند.
+          </p>
+        </div>
+        <div class="badges">
+          <span class="badge">حروف فارسی</span>
+          <span class="badge">بدون عدد</span>
+          <span class="badge">کلید اختیاری</span>
+        </div>
+      </header>
+
+      <label for="plain">ورودی</label>
+      <textarea
+        id="plain"
+        placeholder="برای رمزنگاری: متن اصلی را اینجا بگذارید.
+برای رمزگشایی: متن مخدوش‌شده را همینجا بچسبانید."
+      ></textarea>
+
+      <label for="pass">کلید (اختیاری)</label>
+      <input id="pass" placeholder="اگر کلید دارد، اینجا وارد کنید." />
+
+      <div class="buttons">
+        <button class="primary" id="encBtn" title="متن → کلمات">
+          🔒 رمزنگاری
+        </button>
+        <button class="warning" id="decBtn" title="کلمات → متن">
+          🔓 رمزگشایی
+        </button>
+        <button id="swapBtn" title="جابجایی ورودی/خروجی">🔁 جابجایی</button>
+      </div>
+
+      <label for="out">خروجی</label>
+      <textarea
+        id="out"
+        placeholder="نتیجه اینجا نمایش داده می‌شود ..."
+      ></textarea>
+
+      <div class="below">
+        <button id="copyBtn">📋 کپی خروجی</button>
+        <button class="secondary" id="clearBtn">🧹 پاکسازی فرم</button>
+      </div>
+
+      <div id="msg" class="msg"></div>
+
+      <footer class="foot">
+        تهیه شده توسط <a href="https://ircf.space" target="_blank">IRCF</a
+        ><br />
+        تقدیم به مردم شریف ایران
+        <br />
+        <br />
+        <span dir="ltr">
+          <a
+            class="github-button"
+            href="https://github.com/ircfspace/encodify"
+            data-color-scheme="no-preference: light; light: light; dark: dark;"
+            data-icon="octicon-star"
+            data-show-count="true"
+            aria-label="Star ircfspace/encodify on GitHub"
+            >Star</a
+          >
+        </span>
+      </footer>
+    </div>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

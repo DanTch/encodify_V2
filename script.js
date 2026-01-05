@@ -672,3 +672,50 @@ $("clearBtn").addEventListener("click", clearForm);
 // لیسنرهای دکمه‌های فایل
 $("fileEncBtn").addEventListener("click", processFileEncrypt);
 $("fileDecBtn").addEventListener("click", processFileDecrypt);
+
+// ... (تمام کدهای قبلی سر جای خود باشند) ...
+
+// ==========================================
+// بخش مربوط به PWA و نصب آفلاین
+// ==========================================
+
+// 1. ثبت سرویس‌ورکر (Service Worker)
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then((reg) => console.log("SW registered:", reg.scope))
+      .catch((err) => console.log("SW registration failed:", err));
+  });
+}
+
+// 2. مدیریت دکمه نصب
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  // جلوگیری از نمایش خودکار بنر مرورگر
+  e.preventDefault();
+  deferredPrompt = e;
+  // نمایش دکمه نصب ما
+  installBtn.style.display = "block";
+});
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+  // نمایش پرامپت نصب
+  deferredPrompt.prompt();
+  // منتظر ماندن برای انتخاب کاربر
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log("User response:", outcome);
+  // مخفی کردن دکمه بعد از نصب
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+
+// اگر برنامه از قبل نصب شده باشد، دکمه را نشان نده
+window.addEventListener("appinstalled", () => {
+  installBtn.style.display = "none";
+  console.log("PWA Installed");
+  ok("برنامه با موفقیت نصب شد. اکنون می‌توانید آفلاین استفاده کنید.");
+});

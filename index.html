@@ -4,11 +4,13 @@
     <meta charset="utf-8" />
     <title>Encodify | مخدوش‌گر</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1220">
+    <link rel="manifest" href="manifest.json" />
     <link
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/style.css?v2.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v2.1" />
   </head>
   <body>
     <div class="wrap">
@@ -20,11 +22,15 @@
             مناسب برای عبور از فیلترهای حساس به محتوا.
           </p>
         </div>
+        <button id="installBtn" class="primary" style="display: none; margin-top: 10px;">
+          📲 نصب نسخه آفلاین
+        </button>
+        
         <div class="badges">
           <span class="badge">حروف معنادار فارسی</span>
           <span class="badge">ایموجی</span>
           <span class="badge">پشتیبانی فایل</span>
-          <span class="badge">فاقد کاراکترهای زائد</span>
+          <span class="badge">آفلاین (PWA)</span>
           <span class="badge">کلید اختیاری</span>
         </div>
       </header>
@@ -83,7 +89,7 @@
 
       <footer class="foot">
         تهیه شده توسط <a href="https://ircf.space" target="_blank">IRCF</a><br />
-        توسعه یافته نسخه ۲
+        توسعه یافته نسخه ۲ + آفلاین
         <br />
         <br />
         <span dir="ltr">
@@ -100,6 +106,6 @@
       </footer>
     </div>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script src="script.js?v2.0"></script>
+    <script src="script.js?v2.1"></script>
   </body>
 </html>

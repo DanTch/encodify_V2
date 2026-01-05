@@ -3,69 +3,87 @@
   <head>
     <meta charset="utf-8" />
     <title>Encodify | مخدوش‌گر</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/style.css?v1.2" />
+    <link rel="stylesheet" href="assets/css/style.css?v2.0" />
   </head>
   <body>
     <div class="wrap">
       <header class="head">
         <div>
-          <h1>مخدوش‌گر</h1>
+          <h1>مخدوش‌گر (Encodify)</h1>
           <p class="subtitle">
-            یک ابزار تحت وب مناسب ارسال امن‌تر در شرایط شنود یا محدودیت پیامکی،
-            که متن، لینک و کانفیگ‌ها را با کلید اختیاری به کلمات فارسی و ایموجی
-            تبدیل نموده و امکان بازگردانی مجدد آن‌را فراهم می‌کند.
+            ابزار امن‌سازی متن و فایل با تبدیل به کلمات فارسی و ایموجی.
+            مناسب برای عبور از فیلترهای حساس به محتوا.
           </p>
         </div>
         <div class="badges">
           <span class="badge">حروف معنادار فارسی</span>
           <span class="badge">ایموجی</span>
-          <span class="badge">فاقد عدد</span>
+          <span class="badge">پشتیبانی فایل</span>
           <span class="badge">فاقد کاراکترهای زائد</span>
           <span class="badge">کلید اختیاری</span>
         </div>
       </header>
 
-      <label for="plain">ورودی</label>
-      <textarea
-        id="plain"
-        placeholder="برای رمزنگاری: متن اصلی را اینجا بگذارید.
-برای رمزگشایی: متن مخدوش‌شده را همینجا بچسبانید."
-      ></textarea>
+      <label for="pass">کلید رمزنگاری (اختیاری)</label>
+      <input id="pass" placeholder="اگر می‌خواهید رمز شود، اینجا کلید بگذارید. (برای بازگشایی هم لازم است)" />
 
-      <label for="pass">کلید (اختیاری)</label>
-      <input id="pass" placeholder="اگر کلید دارد، اینجا وارد کنید." />
-
-      <div class="buttons">
-        <button class="primary" id="encBtn" title="متن → کلمات">
-          🔒 رمزنگاری
-        </button>
-        <button class="warning" id="decBtn" title="کلمات → متن">
-          🔓 رمزگشایی
-        </button>
-        <button id="swapBtn" title="جابجایی ورودی/خروجی">🔁 جابجایی</button>
+      <div class="section-box">
+        <div class="separator-title">📂 عملیات فایل</div>
+        <label for="fileIn" style="margin-top:0;">انتخاب فایل</label>
+        <input type="file" id="fileIn" />
+        
+        <div class="buttons">
+          <button class="primary" id="fileEncBtn" title="فایل اصلی ← فایل متنی">
+            ⬇️ رمزنگاری و دانلود فایل
+          </button>
+          <button class="warning" id="fileDecBtn" title="فایل متنی ← فایل اصلی">
+            ⬇️ رمزگشایی و دانلود فایل
+          </button>
+        </div>
+        <p class="hint">نکته: فایل خروجی رمزنگاری شده، حجم بسیار بیشتری (حدود ۵ تا ۱۰ برابر) نسبت به فایل اصلی خواهد داشت.</p>
       </div>
 
-      <label for="out">خروجی</label>
-      <textarea
-        id="out"
-        placeholder="نتیجه اینجا نمایش داده می‌شود ..."
-      ></textarea>
+      <div class="section-box">
+        <div class="separator-title">📝 عملیات متن</div>
+        <label for="plain" style="margin-top:0;">ورودی متن</label>
+        <textarea
+          id="plain"
+          placeholder="برای رمزنگاری: متن اصلی را اینجا بگذارید.
+برای رمزگشایی: متن مخدوش‌شده را همینجا بچسبانید."
+        ></textarea>
 
-      <div class="below">
-        <button id="copyBtn">📋 کپی خروجی</button>
-        <button class="secondary" id="clearBtn">🧹 پاکسازی فرم</button>
+        <div class="buttons">
+          <button class="primary" id="encBtn" title="متن → کلمات">
+            🔒 رمزنگاری متن
+          </button>
+          <button class="warning" id="decBtn" title="کلمات → متن">
+            🔓 رمزگشایی متن
+          </button>
+          <button id="swapBtn" title="جابجایی ورودی/خروجی">🔁 جابجایی</button>
+        </div>
+
+        <label for="out">خروجی متن</label>
+        <textarea
+          id="out"
+          placeholder="نتیجه اینجا نمایش داده می‌شود ..."
+        ></textarea>
+
+        <div class="below">
+          <button id="copyBtn">📋 کپی خروجی</button>
+          <button class="secondary" id="clearBtn">🧹 پاکسازی فرم</button>
+        </div>
       </div>
 
       <div id="msg" class="msg"></div>
 
       <footer class="foot">
-        تهیه شده توسط <a href="https://ircf.space" target="_blank">IRCF</a
-        ><br />
-        تقدیم به مردم شریف ایران
+        تهیه شده توسط <a href="https://ircf.space" target="_blank">IRCF</a><br />
+        توسعه یافته نسخه ۲
         <br />
         <br />
         <span dir="ltr">
@@ -82,6 +100,6 @@
       </footer>
     </div>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script src="script.js?v1.2"></script>
+    <script src="script.js?v2.0"></script>
   </body>
 </html>

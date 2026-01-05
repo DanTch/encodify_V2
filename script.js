@@ -360,12 +360,15 @@ const msg = $("msg");
 
 function ok(t) {
   msg.textContent = "✔ " + t;
+  msg.style.color = "#aaffaa";
 }
 function err(t) {
   msg.textContent = "❌ " + t;
+  msg.style.color = "#ffaaaa";
 }
 function info(t) {
   msg.textContent = "ℹ️ " + t;
+  msg.style.color = "#fff";
 }
 
 function bytesToTokens(bytes) {
@@ -440,12 +443,11 @@ async function deriveKey(pass, salt) {
   );
 }
 
-async function packText(text, pass) {
-  const raw = te.encode(text);
-
-  const gz = await gzipCompress(raw);
-  const useGzip = gz.length < raw.length;
-  const payload = useGzip ? gz : raw;
+// تابع جنرال برای پکینگ (هم متن هم فایل)
+async function packData(inputUint8, pass) {
+  const gz = await gzipCompress(inputUint8);
+  const useGzip = gz.length < inputUint8.length;
+  const payload = useGzip ? gz : inputUint8;
 
   const version = 1;
   const encrypted = !!pass;
@@ -479,7 +481,8 @@ async function packText(text, pass) {
   return out;
 }
 
-async function unpackToText(bytes, pass) {
+// تابع جنرال برای آنپکینگ (هم متن هم فایل)
+async function unpackData(bytes, pass) {
   if (bytes.length < 2) throw new Error("داده خراب است");
   const version = bytes[0];
   const flags = bytes[1];
@@ -515,10 +518,12 @@ async function unpackToText(bytes, pass) {
   }
 
   const raw2 = compressed ? await gzipDecompress(payload) : payload;
-  return td.decode(raw2);
+  return raw2;
 }
 
-async function encrypt() {
+// ---- عملیات متن ----
+
+async function encryptText() {
   msg.textContent = "";
   const text = $("plain").value;
   if (!text.trim()) {
@@ -527,12 +532,16 @@ async function encrypt() {
     return;
   }
   const pass = ($("pass").value || "").trim();
-  const bytes = await packText(text, pass);
+  
+  // تبدیل متن به بایت و سپس پک کردن
+  const raw = te.encode(text);
+  const bytes = await packData(raw, pass);
+  
   $("out").value = bytesToTokens(bytes);
   ok("انجام شد");
 }
 
-async function decrypt() {
+async function decryptText() {
   msg.textContent = "";
   const coded = $("plain").value;
   if (!coded.trim()) {
@@ -541,11 +550,88 @@ async function decrypt() {
     return;
   }
   const pass = ($("pass").value || "").trim();
-  const bytes = tokensToBytes(coded);
-  const text = await unpackToText(bytes, pass);
-  $("out").value = text;
-  ok("انجام شد");
+  
+  try {
+    const bytes = tokensToBytes(coded);
+    const raw = await unpackData(bytes, pass);
+    const text = td.decode(raw);
+    $("out").value = text;
+    ok("انجام شد");
+  } catch (e) {
+    err(e.message);
+  }
 }
+
+// ---- عملیات فایل ----
+
+function downloadBlob(content, filename, contentType) {
+  const blob = new Blob([content], { type: contentType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 0);
+}
+
+async function processFileEncrypt() {
+  const fileInput = $("fileIn");
+  if (!fileInput.files.length) {
+    info("لطفا ابتدا یک فایل انتخاب کنید");
+    return;
+  }
+  
+  msg.textContent = "⏳ در حال پردازش فایل...";
+  try {
+    const file = fileInput.files[0];
+    const arrayBuffer = await file.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+    const pass = ($("pass").value || "").trim();
+
+    // تبدیل فایل به توکن
+    const packedBytes = await packData(bytes, pass);
+    const tokenString = bytesToTokens(packedBytes);
+
+    // دانلود نتیجه به عنوان فایل متنی
+    downloadBlob(tokenString, file.name + ".encoded.txt", "text/plain");
+    ok(`فایل رمز شد و دانلود گردید (${tokenString.length.toLocaleString()} کاراکتر)`);
+  } catch (e) {
+    err(e.message);
+  }
+}
+
+async function processFileDecrypt() {
+  const fileInput = $("fileIn");
+  if (!fileInput.files.length) {
+    info("لطفا ابتدا فایل متنی رمز شده را انتخاب کنید");
+    return;
+  }
+
+  msg.textContent = "⏳ در حال پردازش فایل...";
+  try {
+    const file = fileInput.files[0];
+    const text = await file.text(); // خواندن فایل متنی (توکن‌ها)
+    const pass = ($("pass").value || "").trim();
+
+    const bytes = tokensToBytes(text);
+    const originalBytes = await unpackData(bytes, pass);
+
+    // تلاش برای حذف پسوند .encoded.txt اگر وجود دارد
+    let originalName = file.name.replace(".encoded.txt", "").replace(".txt", "");
+    // اگر اسم نقطه نداشت (پسوند نداشت)، یک پسوند جنرال بدهیم
+    if(!originalName.includes(".")) originalName += ".bin";
+
+    downloadBlob(originalBytes, "decrypted_" + originalName, "application/octet-stream");
+    ok("فایل رمزگشایی شد و دانلود آغاز شد");
+  } catch (e) {
+    err(e.message);
+  }
+}
+
 
 function swap() {
   [$("plain").value, $("out").value] = [$("out").value, $("plain").value];
@@ -566,17 +652,23 @@ function clearForm() {
   $("plain").value = "";
   $("out").value = "";
   $("pass").value = "";
+  $("fileIn").value = "";
   info("پاک شد");
 }
 
+// لیسنرهای دکمه‌های متن
 $("encBtn").addEventListener("click", () =>
-  encrypt().catch((e) => err(e.message))
+  encryptText().catch((e) => err(e.message))
 );
 $("decBtn").addEventListener("click", () =>
-  decrypt().catch((e) => err(e.message))
+  decryptText().catch((e) => err(e.message))
 );
 $("swapBtn").addEventListener("click", swap);
 $("copyBtn").addEventListener("click", () =>
   copyOut().catch((e) => err(e.message))
 );
 $("clearBtn").addEventListener("click", clearForm);
+
+// لیسنرهای دکمه‌های فایل
+$("fileEncBtn").addEventListener("click", processFileEncrypt);
+$("fileDecBtn").addEventListener("click", processFileDecrypt);

@@ -361,8 +361,18 @@ async function encryptText() {
   const raw = te.encode(text);
   const bytes = await packData(raw, pass); // بدون پروگرس بار برای متن
   
-  $("out").value = bytesToTokens(bytes);
-  ok("متن رمز شد");
+  const outputText = bytesToTokens(bytes);
+  $("out").value = outputText;
+
+  // کپی خودکار در کلیپ‌بورد
+  try {
+    await navigator.clipboard.writeText(outputText);
+    ok("متن رمزنگاری و به‌صورت خودکار کپی شد");
+  } catch (err) {
+    // اگر کپی خودکار به هر دلیلی کار نکرد، فقط پیام رمزنگاری نمایش داده شود
+    console.error("Copy failed", err);
+    ok("متن رمز شد (کپی خودکار انجام نشد)");
+  }
 }
 
 async function decryptText() {

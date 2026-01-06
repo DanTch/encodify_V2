@@ -293,3 +293,9 @@ button:active {
   text-decoration: none;
   border-bottom: 1px dotted #fff;
 }
+
+textarea[readonly] {
+  background: rgba(0, 0, 0, 0.2); /* کمی تیره‌تر */
+  cursor: default; /* نمایش موس به صورت پیش‌فرض به جای حالت تایپ */
+  opacity: 0.9;
+}

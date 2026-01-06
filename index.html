@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/style.css?v2.1" />
+    <link rel="stylesheet" href="assets/css/style.css?v2.2" />
   </head>
   <body>
     <div class="wrap">
@@ -35,77 +35,103 @@
         </div>
       </header>
 
+      <!-- تب‌های ناوبری -->
+      <div class="tabs-container">
+        <button class="tab-btn active" data-target="tab-file">📂 عملیات فایل</button>
+        <button class="tab-btn" data-target="tab-text">📝 عملیات متن</button>
+      </div>
+
       <label for="pass">کلید رمزنگاری (اختیاری)</label>
-      <input id="pass" placeholder="اگر می‌خواهید رمز شود، اینجا کلید بگذارید. (برای بازگشایی هم لازم است)" />
+      <input id="pass" type="password" placeholder="اگر می‌خواهید رمز شود، اینجا کلید بگذارید. (برای بازگشایی هم لازم است)" />
 
-      <div class="section-box">
-        <div class="separator-title">📂 عملیات فایل</div>
-        <label for="fileIn" style="margin-top:0;">انتخاب فایل</label>
-        <input type="file" id="fileIn" />
-        
-        <div class="buttons">
-          <button class="primary" id="fileEncBtn" title="فایل اصلی ← فایل متنی">
-            ⬇️ رمزنگاری و دانلود فایل
-          </button>
-          <button class="warning" id="fileDecBtn" title="فایل متنی ← فایل اصلی">
-            ⬇️ رمزگشایی و دانلود فایل
-          </button>
+      <!-- محتوای تب فایل -->
+      <div id="tab-file" class="tab-content active">
+        <div class="section-box">
+          <div class="separator-title">📂 فایل</div>
+          
+          <!-- ناحیه دراگ و دراپ -->
+          <div class="drop-zone" id="dropZone">
+            <span class="drop-icon">☁️</span>
+            <p class="drop-text">فایل را اینجا رها کنید یا کلیک کنید</p>
+            <input type="file" id="fileIn" hidden />
+            <div id="fileNameDisplay" class="file-name-display"></div>
+          </div>
+          
+          <!-- نوار پیشرفت -->
+          <div class="progress-container" id="progressContainer" style="display: none;">
+             <div class="progress-bar" id="progressBar"></div>
+             <span class="progress-text" id="progressText">0%</span>
+          </div>
+
+          <div class="buttons">
+            <button class="primary" id="fileEncBtn" title="فایل اصلی ← فایل متنی">
+              ⬇️ رمزنگاری و دانلود فایل
+            </button>
+            <button class="warning" id="fileDecBtn" title="فایل متنی ← فایل اصلی">
+              ⬇️ رمزگشایی و دانلود فایل
+            </button>
+          </div>
+          <p class="hint">نکته: فایل خروجی رمزنگاری شده، حجم بسیار بیشتری (حدود ۵ تا ۱۰ برابر) نسبت به فایل اصلی خواهد داشت.</p>
         </div>
-        <p class="hint">نکته: فایل خروجی رمزنگاری شده، حجم بسیار بیشتری (حدود ۵ تا ۱۰ برابر) نسبت به فایل اصلی خواهد داشت.</p>
       </div>
 
-      <div class="section-box">
-        <div class="separator-title">📝 عملیات متن</div>
-        <label for="plain" style="margin-top:0;">ورودی متن</label>
-        <textarea
-          id="plain"
-          placeholder="برای رمزنگاری: متن اصلی را اینجا بگذارید.
+      <!-- محتوای تب متن -->
+      <div id="tab-text" class="tab-content">
+        <div class="section-box">
+          <div class="separator-title">📝 متن</div>
+          <label for="plain" style="margin-top:0;">ورودی متن</label>
+          <textarea
+            id="plain"
+            placeholder="برای رمزنگاری: متن اصلی را اینجا بگذارید.
 برای رمزگشایی: متن مخدوش‌شده را همینجا بچسبانید."
-        ></textarea>
+          ></textarea>
 
-        <div class="buttons">
-          <button class="primary" id="encBtn" title="متن → کلمات">
-            🔒 رمزنگاری متن
-          </button>
-          <button class="warning" id="decBtn" title="کلمات → متن">
-            🔓 رمزگشایی متن
-          </button>
-          <button id="swapBtn" title="جابجایی ورودی/خروجی">🔁 جابجایی</button>
-        </div>
+          <div class="buttons">
+            <button class="primary" id="encBtn" title="متن → کلمات">
+              🔒 رمزنگاری متن
+            </button>
+            <button class="warning" id="decBtn" title="کلمات → متن">
+              🔓 رمزگشایی متن
+            </button>
+            <button id="swapBtn" title="جابجایی ورودی/خروجی">🔁 جابجایی</button>
+          </div>
 
-        <label for="out">خروجی متن</label>
-        <textarea
-          id="out"
-          placeholder="نتیجه اینجا نمایش داده می‌شود ..."
-        ></textarea>
+          <label for="out">خروجی متن</label>
+          <textarea
+            id="out"
+            placeholder="نتیجه اینجا نمایش داده می‌شود ..."
+          ></textarea>
 
-        <div class="below">
-          <button id="copyBtn">📋 کپی خروجی</button>
-          <button class="secondary" id="clearBtn">🧹 پاکسازی فرم</button>
+          <div class="below">
+            <button id="copyBtn">📋 کپی خروجی</button>
+            <button id="shareBtn" class="secondary" style="display: none;">📤 اشتراک‌گذاری</button>
+            <button class="secondary" id="clearBtn">🧹 پاکسازی فرم</button>
+          </div>
         </div>
       </div>
 
-      <div id="msg" class="msg"></div>
+      <!-- کانتینر Toast ها -->
+      <div id="toast-container"></div>
 
       <footer class="foot">
         تهیه شده توسط <a href="https://ircf.space" target="_blank">IRCF</a><br />
-        توسعه یافته نسخه ۲ + آفلاین
+        توسعه یافته نسخه ۲.۲ + آفلاین
         <br />
         <br />
         <span dir="ltr">
           <a
             class="github-button"
-            href="https://github.com/ircfspace/encodify"
+            href="https://github.com/DanTch/encodify_V2"
             data-color-scheme="no-preference: light; light: light; dark: dark;"
             data-icon="octicon-star"
             data-show-count="true"
-            aria-label="Star ircfspace/encodify on GitHub"
+            aria-label="Star DanTch/encodify_V2 on GitHub"
             >Star</a
           >
         </span>
       </footer>
     </div>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script src="script.js?v2.1"></script>
+    <script src="script.js?v2.2"></script>
   </body>
 </html>

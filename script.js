@@ -574,3 +574,27 @@ window.addEventListener("appinstalled", () => {
   installBtn.style.display = "none";
   ok("برنامه نصب شد.");
 });
+
+// --- منطق دکمه چشم (نمایش/مخفی‌سازی پسورد) ---
+const passInput = $("pass");
+const toggleBtn = $("togglePass");
+
+toggleBtn.addEventListener("click", (e) => {
+  e.preventDefault(); // جلوگیری از رفتار پیش‌فرض
+  
+  const isPassword = passInput.getAttribute("type") === "password";
+  
+  if (isPassword) {
+    // نمایش رمز
+    passInput.setAttribute("type", "text");
+    toggleBtn.textContent = "🙈"; // تغییر آیکون به "مخفی کن"
+    toggleBtn.style.opacity = "1";
+    toggleBtn.title = "مخفی کردن کلید";
+  } else {
+    // مخفی کردن رمز
+    passInput.setAttribute("type", "password");
+    toggleBtn.textContent = "👁️"; // تغییر آیکون به "مشاهده"
+    toggleBtn.style.opacity = "0.5";
+    toggleBtn.title = "نمایش کلید";
+  }
+});

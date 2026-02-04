@@ -1,9 +1,28 @@
+/* تعریف فونت معمولی (Regular) */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* تعریف فونت ضخیم (Bold) */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
-  font-family: Vazirmatn, system-ui;
+  /* حالا سیستم از فونت لوکال استفاده می‌کند */
+  font-family: 'Vazirmatn', system-ui, sans-serif;
   background: #0b1220;
   color: #e8eefc;
   margin: 0;
-  overflow-x: hidden; /* جلوگیری از اسکرول افقی در موبایل */
+  overflow-x: hidden;
 }
 .wrap {
   max-width: 860px;
@@ -336,3 +355,4 @@ textarea[readonly] {
   background: rgba(255, 255, 255, 0.05);
   transform: translateY(-50%) scale(1.1);
 }
+
